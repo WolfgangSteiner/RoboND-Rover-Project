@@ -153,6 +153,8 @@ def is_overhanging_rock_ahead(Rover):
     x1,x2 = x_margin, w - x_margin
 
     black_rock_idx_y, black_rock_idx_x = black_rock_mask[:,x1:x2].nonzero()
+    if black_rock_idx_y.size == 0:
+        return False
 
     return np.min(black_rock_idx_y) < 4 and np.max(black_rock_idx_y) > h * 0.575
 
