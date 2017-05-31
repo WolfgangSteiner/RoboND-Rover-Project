@@ -64,7 +64,7 @@ class MoveForward(object):
 
         #print("Max nav angle: %.2f, Min obs angle: %.2f" % (max_nav_angle, min_obs_angle))
 
-        new_steer = np.clip(min(max_nav_angle - 25,min_obs_angle - 35), -15, 15)
+        new_steer = np.clip(min(max_nav_angle - 25,min_obs_angle - 40), -15, 15)
         self.rover.steer = self.a * new_steer + (1-self.a) * self.rover.steer
 
 
