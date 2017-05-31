@@ -5,13 +5,15 @@ from io import BytesIO, StringIO
 import base64
 import time
 
+SEPARATOR = ';'
+
 def update_rover(Rover, data):
       # Initialize start time and sample positions
       if Rover.start_time == None:
             Rover.start_time = time.time()
             Rover.total_time = 0
-            samples_xpos = np.int_([np.float(pos.strip()) for pos in data["samples_x"].split(',')])
-            samples_ypos = np.int_([np.float(pos.strip()) for pos in data["samples_y"].split(',')])
+            samples_xpos = np.int_([np.float(pos.strip()) for pos in data["samples_x"].split(SEPARATOR)])
+            samples_ypos = np.int_([np.float(pos.strip()) for pos in data["samples_y"].split(SEPARATOR)])
             Rover.samples_pos = (samples_xpos, samples_ypos)
             Rover.samples_found = np.zeros((len(Rover.samples_pos[0]))).astype(np.int)
       # Or just update elapsed time
@@ -20,11 +22,11 @@ def update_rover(Rover, data):
             if np.isfinite(tot_time):
                   Rover.total_time = tot_time
       # Print out the fields in the telemetry data dictionary
-      print(data.keys())
+      #print(data.keys())
       # The current speed of the rover in m/s
       Rover.vel = np.float(data["speed"])
       # The current position of the rover
-      Rover.pos = np.fromstring(data["position"], dtype=float, sep=',')
+      Rover.pos = np.fromstring(data["position"], dtype=float, sep=SEPARATOR)
       # The current yaw angle of the rover
       Rover.yaw = np.float(data["yaw"])
       # The current yaw angle of the rover
@@ -38,8 +40,8 @@ def update_rover(Rover, data):
       # Near sample flag
       Rover.near_sample = np.int(data["near_sample"])
 
-      print('speed =',Rover.vel, 'position =', Rover.pos, 'throttle =', 
-      Rover.throttle, 'steer_angle =', Rover.steer, 'near_sample', Rover.near_sample, data["picking_up"])
+      #print('speed =',Rover.vel, 'position =', Rover.pos, 'throttle =',
+      #Rover.throttle, 'steer_angle =', Rover.steer, 'near_sample', Rover.near_sample, data["picking_up"])
 
       # Get the current image from the center camera of the rover
       imgString = data["image"]
@@ -79,7 +81,7 @@ def create_output_images(Rover):
       # to confirm whether detections are real
       if rock_world_pos[0].any():
             rock_size = 2
-            for idx in range(len(Rover.samples_pos[0]) - 1):
+            for idx in range(len(Rover.samples_pos[0])):
                   test_rock_x = Rover.samples_pos[0][idx]
                   test_rock_y = Rover.samples_pos[1][idx]
                   rock_sample_dists = np.sqrt((test_rock_x - rock_world_pos[1])**2 + \
