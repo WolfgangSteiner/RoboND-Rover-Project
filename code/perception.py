@@ -149,7 +149,7 @@ def perception_step(Rover):
 def is_overhanging_rock_ahead(Rover):
     h,w = Rover.img.shape[0:2]
     black_rock_mask = cv2.inRange(Rover.img, (0,0,0), (8,8,8))
-    x_margin = w//3
+    x_margin = 3*w//8
     x1,x2 = x_margin, w - x_margin
 
     black_rock_idx_y, black_rock_idx_x = black_rock_mask[:,x1:x2].nonzero()

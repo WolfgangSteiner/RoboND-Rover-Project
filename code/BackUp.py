@@ -1,6 +1,6 @@
-from TurnToBearing import TurnToBearing
-from utils import distance
+from Rotate import Rotate
 import numpy as np
+from utils import *
 
 class BackUp(object):
     def __init__(self, rover):
@@ -21,14 +21,19 @@ class BackUp(object):
         if self.is_done:
             return
 
-        if not self.did_move and self.distance_moved() > 0.1:
+        if not self.did_move and self.step_count > 40:
+            self.rover.throttle *= -1
+
+
+        if not self.did_move and self.distance_moved() > 0.5:
             self.did_move = True
 
 
-        if self.rover.roll > 5 and not self.did_move:
+        if abs(self.rover.roll) > 5:
             self.mode = "twist"
-            self.rover.throtte = 0
+            self.rover.throttle = 0
             self.rover.steer = -15
+
         elif self.distance_moved() > 0.25:
             self.rover.steer = -15
 
@@ -36,23 +41,26 @@ class BackUp(object):
             self.rover.brake = 0
             self.rover.steer = 15
             self.rover.throttle = -1.0
-        self.step_count +=1
+            self.step_count +=1
 
 
     def next(self):
         if self.is_done:
+            self.rover.throttle = 0
+            self.rover.steer = 0
             return None
 
         elif self.did_move and self.distance_moved() > 0.5:
             self.rover.throttle = 0
+            self.rover.brake = 1
             self.is_done = True
-            return TurnToBearing(self.rover, -22.5)
+            return Rotate(self.rover, -22.5, fast=True)
 
         elif self.mode == 'twist' and abs(self.rover.roll) < 2.5:
             self.rover.steer = 0
             self.rover.throttle = 0
             self.is_done = True
-            return TurnToBearing(self.rover, -22.5)
+            return Rotate(self.rover, -22.5, fast=True)
 
 
         else:

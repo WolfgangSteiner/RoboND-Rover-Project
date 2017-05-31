@@ -12,5 +12,5 @@ class ApproachRockDetour(StateQueue):
         super().__init__(rover)
         phi = -20
         self.add(TurnToBearing(self.rover, phi))
-        self.add(MoveDistance(self.rover, 2))
+        self.add(MoveDistance(self.rover, 1.5))
         self.add(TurnToRock(self.rover))

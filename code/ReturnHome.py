@@ -18,7 +18,7 @@ class ReturnHome(object):
     def target_velocity(self):
         d = self.distance_to_target()
         if d > 10.0:
-            return 4.0
+            return 3.0
         else:
             return 1.0
 

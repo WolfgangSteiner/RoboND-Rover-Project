@@ -1,6 +1,6 @@
 from utils import *
 from PickupRock import *
-from perception import obstacle_bearing, distance_to_rock, distance_to_obstacle
+from perception import obstacle_bearing, distance_to_rock, distance_to_obstacle, bearing_to_rock
 from ApproachRockDetour import ApproachRockDetour
 
 
@@ -8,7 +8,7 @@ class ApproachRock(object):
     def __init__(self, rover):
         self.rover = rover
         self.target_vel = 0.5
-        self.throttle = 0.1
+        self.throttle = 0.2
         self.mode = "first approach"
         self.distance_to_rock = distance_to_rock(rover) / 10.0
 
@@ -23,7 +23,7 @@ class ApproachRock(object):
     def next(self):
         if self.rover.near_sample:
             return None
-        elif self.mode == "first approach":#and self.is_rock_near_obstacle():
+        elif self.mode == "first approach" and bearing_to_rock(self.rover) > -5:#and self.is_rock_near_obstacle():
             self.mode = "final approach"
             return ApproachRockDetour(self.rover, self.distance_to_rock)
         else:

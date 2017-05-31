@@ -10,9 +10,16 @@ class MoveDistance(object):
         self.throttle = 0.2 * np.sign(target_vel)
         self.is_done = False
         self.is_first_run = True
+        self.not_moved_counter = 0
 
 
     def run(self):
+        if abs(self.rover.vel) < 0.2:
+            self.not_moved_counter += 1
+        else:
+            self.not_moved_counter = 0
+
+
         self.rover.steer = 0
         if self.is_first_run:
             self.start_pos = self.rover.pos
@@ -35,6 +42,8 @@ class MoveDistance(object):
 
     def next(self):
         if self.is_done and abs(self.rover.vel) < 0.2:
+            return None
+        elif not self.is_done and abs(self.rover.vel) < 0.2 and abs(self.rover.throttle) > 0 and self.not_moved_counter > 80:
             return None
         else:
             return self
