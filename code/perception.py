@@ -87,7 +87,7 @@ def perspective_transform(img):
 perspective_transform.M = None
 
 
-def process_layer(Rover, mask, range=40):
+def process_layer(Rover, mask, range=50):
     xpix,ypix = rover_coords(mask)
     xpix,ypix = impose_range(xpix,ypix,range=range)
     return pix_to_world(Rover, xpix, ypix), (xpix, ypix)
