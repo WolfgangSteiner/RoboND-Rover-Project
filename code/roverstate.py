@@ -1,7 +1,7 @@
 import numpy as np
 from pid import PID
 from StateMachine import StateMachine
-from MoveForward import MoveForward
+from MapAndCollect import MoveForward
 from ReturnHome import ReturnHome
 from MoveDistance import MoveDistance
 
